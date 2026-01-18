@@ -1,68 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>CreativeLens Photography</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Photography Booking</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- HERO SECTION -->
-<header class="hero">
-  <div class="hero-overlay">
-    <h1>CreativeLens Photography</h1>
-    <p>Capturing moments that last forever</p>
-  </div>
-</header>
+  <div class="overlay"></div>
 
-<div class="container">
+  <h1 class="title">Book a Photoshoot</h1>
 
-  <!-- AUTH SECTION -->
-  <section class="section">
-    <h2 class="section-title">Client Access</h2>
-
-    <div class="auth-grid">
-      <div class="card">
-        <h3>Create Account</h3>
-        <input id="reg-name" placeholder="Full Name">
-        <input id="reg-email" placeholder="Email">
-        <input id="reg-password" type="password" placeholder="Password">
-        <button onclick="register()">Register</button>
-      </div>
-
-      <div class="card">
-        <h3>Client Login</h3>
-        <input id="login-email" placeholder="Email">
-        <input id="login-password" type="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-      </div>
-    </div>
-  </section>
-
-  <!-- BOOKING SECTION -->
-  <section class="section">
-    <h2 class="section-title">Book a Photoshoot</h2>
+  <div class="container">
 
     <div class="card">
-      <h3>Photography Packages</h3>
-      <div id="services" class="services-grid"></div>
+      <h2>Register</h2>
+      <input id="reg-name" placeholder="Full Name" />
+      <input id="reg-email" placeholder="Email" />
+      <input id="reg-password" type="password" placeholder="Password" />
+      <button onclick="register()">Register</button>
     </div>
 
     <div class="card">
-      <h3>Session Details</h3>
-      <p id="login-warning" class="warning">
-        Please log in to book a session.
-      </p>
-      <input id="user-id" placeholder="Your User ID" disabled>
-      <input id="service-id" placeholder="Selected Service ID" disabled>
-      <input id="date" type="date" disabled>
-      <input id="time" type="time" disabled>
+      <h2>Login</h2>
+      <input id="login-email" placeholder="Email" />
+      <input id="login-password" type="password" placeholder="Password" />
+      <button onclick="login()">Login</button>
+      <p id="login-warning">Please log in to book a session.</p>
+    </div>
+
+    <div class="card wide">
+      <h2>Photography Packages</h2>
+      <div id="services"></div>
+    </div>
+
+    <div class="card wide">
+      <h2>Session Details</h2>
+      <input id="user-id" placeholder="User ID" disabled />
+      <input id="service-id" placeholder="Service ID" disabled />
+      <input id="date" type="date" disabled />
+      <input id="time" type="time" disabled />
       <button id="book-btn" onclick="book()" disabled>Book Session</button>
     </div>
-  </section>
 
-</div>
+  </div>
 
-<script src="app.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

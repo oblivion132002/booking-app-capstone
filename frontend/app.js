@@ -28,59 +28,72 @@ function login() {
     .then(data => {
       loggedInUserId = data.user_id;
 
-      alert("Login successful!");
-
-      const userIdInput = document.getElementById("user-id");
-      userIdInput.value = loggedInUserId;
-      userIdInput.disabled = true;
-
-      document.getElementById("login-warning").style.display = "none";
+      document.getElementById("user-id").value = loggedInUserId;
       document.getElementById("service-id").disabled = false;
       document.getElementById("date").disabled = false;
       document.getElementById("time").disabled = false;
       document.getElementById("book-btn").disabled = false;
+      document.getElementById("login-warning").style.display = "none";
+
+      alert("Login successful!");
     });
 }
 
+/* ===== LOAD PHOTOGRAPHY PACKAGES ===== */
+
 fetch(`${API}/services`)
-  .then(res => res.json())
+  .then(res => {
+    if (!res.ok) {
+      throw new Error("Failed to fetch services");
+    }
+    return res.json();
+  })
   .then(services => {
     const container = document.getElementById("services");
     container.innerHTML = "";
 
-    services.forEach(s => {
-      const div = document.createElement("div");
-      div.className = "service-card";
+    if (!services || services.length === 0) {
+      container.innerHTML = "<p>No packages available.</p>";
+      return;
+    }
 
-      let descriptionText = "";
+    services.forEach(service => {
+      const card = document.createElement("div");
+      card.className = "service-card";
 
-      if (s.service_id === 1) {
-        descriptionText =
-          "Portrait Photography — a relaxed session focused on capturing your personality, style, and expression.";
-      } else if (s.service_id === 2) {
-        descriptionText =
-          "Event Photography — professional coverage capturing candid moments and key highlights of your event.";
-      } else if (s.service_id === 3) {
-        descriptionText =
-          "Wedding Photography — full-day coverage documenting emotions, details, and unforgettable moments.";
+      let description = "";
+
+      if (service.service_id === 1) {
+        description =
+          "Portrait Photography — a relaxed session capturing personality, style, and expression.";
+      } else if (service.service_id === 2) {
+        description =
+          "Event Photography — professional coverage capturing key highlights and candid moments.";
+      } else if (service.service_id === 3) {
+        description =
+          "Wedding Photography — full-day coverage of your most important moments.";
       } else {
-        descriptionText =
+        description =
           "Professional photography session tailored to your needs.";
       }
 
-
-      div.innerHTML = `
-        <h4>${s.service_name}</h4>
-        <p>${descriptionText}</p>
-        <p><strong>$${s.price}</strong></p>
+      card.innerHTML = `
+        <h4>${service.service_name}</h4>
+        <p>${description}</p>
+        <p><strong>$${service.price}</strong></p>
       `;
 
-      div.onclick = () => {
-        document.getElementById("service-id").value = s.service_id;
+      card.onclick = () => {
+        document.getElementById("service-id").value = service.service_id;
       };
 
-      container.appendChild(div);
+      container.appendChild(card);
     });
+  })
+  .catch(err => {
+    console.error(err);
+    document.getElementById("services").innerHTML =
+      "<p style='color:white'>Unable to load packages.</p>";
   });
 
 function book() {

@@ -1,118 +1,80 @@
-const express = require('express');
-const cors = require('cors');
-const bcrypt = require('bcrypt');
-const pool = require('./db');
+const express = require("express");
+const cors = require("cors");
+const pool = require("./db");
 
 const app = express();
+const PORT = 3000;
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  res.send('Backend is running');
+/* ---------------- TEST ROUTE ---------------- */
+app.get("/", (req, res) => {
+  res.send("Backend is running");
 });
 
-app.post('/register', async (req, res) => {
+/* ---------------- GET ALL SERVICES ---------------- */
+app.get("/services", async (req, res) => {
   try {
-    const { full_name, email, password } = req.body;
-
-    if (!full_name || !email || !password) {
-      return res.status(400).json({ message: 'All fields required' });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await pool.query(
-      'INSERT INTO users (full_name, email, password_hash) VALUES ($1, $2, $3)',
-      [full_name, email, hashedPassword]
-    );
-
-    res.status(201).json({ message: 'User registered successfully' });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    const result = await pool.query("SELECT * FROM services");
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch services" });
   }
 });
 
-app.post('/login', async (req, res) => {
+/* ---------------- REGISTER ---------------- */
+app.post("/register", async (req, res) => {
+  const { full_name, email, password } = req.body;
   try {
-    const { email, password } = req.body;
+    await pool.query(
+      "INSERT INTO users (full_name, email, password_hash) VALUES ($1, $2, $3)",
+      [full_name, email, password]
+    );
+    res.json({ message: "Registered successfully" });
+  } catch (err) {
+    res.status(500).json({ error: "Registration failed" });
+  }
+});
 
-    if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password required' });
-    }
-
+/* ---------------- LOGIN ---------------- */
+app.post("/login", async (req, res) => {
+  const { email, password } = req.body;
+  try {
     const result = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
+      "SELECT user_id FROM users WHERE email=$1 AND password_hash=$2",
+      [email, password]
     );
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(401).json({ error: "Invalid credentials" });
     }
 
-    const user = result.rows[0];
-
-    const isMatch = await bcrypt.compare(password, user.password_hash);
-
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
-
-    res.json({
-      message: 'Login successful',
-      user: {
-        user_id: user.user_id,
-        full_name: user.full_name,
-        email: user.email,
-        role: user.role
-      }
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ user_id: result.rows[0].user_id });
+  } catch (err) {
+    res.status(500).json({ error: "Login failed" });
   }
 });
 
-app.post('/appointments', async (req, res) => {
+/* ---------------- BOOK APPOINTMENT ---------------- */
+app.post("/book", async (req, res) => {
+  const { user_id, service_id, date, time } = req.body;
+
   try {
-    const { user_id, service_id, appointment_date, appointment_time } = req.body;
-
-    if (!user_id || !service_id || !appointment_date || !appointment_time) {
-      return res.status(400).json({ message: 'All fields are required' });
-    }
-
-    const result = await pool.query(
+    await pool.query(
       `INSERT INTO appointments (user_id, service_id, appointment_date, appointment_time)
-       VALUES ($1, $2, $3, $4)
-       RETURNING *`,
-      [user_id, service_id, appointment_date, appointment_time]
+       VALUES ($1, $2, $3, $4)`,
+      [user_id, service_id, date, time]
     );
 
-    res.status(201).json({
-      message: 'Appointment booked successfully',
-      appointment: result.rows[0]
-    });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.json({ message: "Booking successful" });
+  } catch (err) {
+    res.status(500).json({ error: "Booking failed" });
   }
 });
 
-app.get('/services', async (req, res) => {
-  try {
-    const result = await pool.query(
-      'SELECT service_id, service_name, description, duration_minutes, price FROM services'
-    );
-
-    res.json(result.rows);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-
-const PORT = 3000;
+/* ---------------- START SERVER ---------------- */
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
