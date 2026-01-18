@@ -1,10 +1,138 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 40px;
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
 }
 
-input, button {
-  display: block;
-  margin: 5px 0;
-  padding: 8px;
+body {
+  margin: 0;
+  color: #eee;
+  background: 
+    linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)),
+    url("https://images.unsplash.com/photo-1519741497674-611481863552");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+
+/* HERO */
+.hero {
+  height: 60vh;
+  background: url("https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e") center/cover no-repeat;
+}
+
+.hero-overlay {
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero h1 {
+  font-size: 48px;
+  margin: 0;
+}
+
+.hero p {
+  color: #ccc;
+  font-size: 18px;
+}
+
+/* LAYOUT */
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 50px 20px;
+}
+
+.section {
+  margin-bottom: 80px;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 40px;
+  color: #c79a3b;
+}
+
+/* CARDS */
+.card {
+  background: rgba(28, 28, 28, 0.95);
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+h3 {
+  margin-top: 0;
+}
+
+/* INPUTS */
+input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: none;
+  background: #2a2a2a;
+  color: white;
+}
+
+input:disabled {
+  opacity: 0.5;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  background: #c79a3b;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background: #555;
+  cursor: not-allowed;
+}
+
+/* AUTH GRID */
+.auth-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+/* SERVICES */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.service-card {
+  background: #2a2a2a;
+  padding: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  background: #3a3a3a;
+}
+
+.service-card h4 {
+  margin: 0 0 10px;
+  color: #c79a3b;
+}
+
+.warning {
+  color: #ffae00;
+  margin-bottom: 15px;
 }
