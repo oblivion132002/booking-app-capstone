@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Booking App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Booking App</h1>
+
+<h2>Register</h2>
+<input id="reg-name" placeholder="Full Name">
+<input id="reg-email" placeholder="Email">
+<input id="reg-password" type="password" placeholder="Password">
+<button onclick="register()">Register</button>
+
+<h2>Login</h2>
+<input id="login-email" placeholder="Email">
+<input id="login-password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+
+<h2>Services</h2>
+<ul id="services"></ul>
+
+<h2>Book Appointment</h2>
+<input id="user-id" placeholder="User ID">
+<input id="service-id" placeholder="Service ID">
+<input id="date" type="date">
+<input id="time" type="time">
+<button onclick="book()">Book</button>
+
+<script src="app.js"></script>
+</body>
+</html>
